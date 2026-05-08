@@ -64,13 +64,23 @@ AdaptiveTutor satisfies the project requirements through the following innovativ
 
 ---
 
-## 6. System Architecture
-The system operates as a 5-step pipeline:
-1. **Confusion Detection**: Rule-based (ROUGE-L) and LLM-based detection of student misunderstanding.
-2. **Question Classification**: Deciding if a question is clear, needs rewriting, or indicates confusion.
-3. **Style Selection**: Estimating proficiency and selecting the appropriate `SKILL.md` (Foundation, Standard, Expert).
-4. **Answer Generation**: Streaming responses using the selected pedagogical style.
-5. **Memory Update**: Extracting new facts to update the learner's persistent state.
+## 6. System Architecture & Prompt Engineering
+
+### 6.1 Skill-Based Prompting System
+This project uses a highly structured "Skill-Based Prompting" system. It is the core of how the tutor adapts its behavior without requiring a massive, static prompt for every turn. Instead of one long prompt, the system dynamically assembles a system prompt by layering several Markdown files (`SKILL.md`) based on the current context:
+
+1. **The Prompt Architecture**: The system builds the final prompt in `modules/adaptive_teacher.py` using these layers:
+   * **INDEX.md (Global)**: Defines the identity of "AdaptiveTutor" and general pedagogical principles (e.g., "One concept at a time," "Never say 'simply'").
+   * **Style Skills**: Depending on your calculated proficiency, it loads either `explanation/foundation/SKILL.md`, `standard/SKILL.md`, or `expert/SKILL.md`. These control technical depth and sentence length.
+
+2. **Why is it needed?**: This system is critical for several reasons:
+   * **Latency & Cost**: By only loading the "skills" needed for the current turn, the prompt stays lean, saving tokens and speeding up response times.
+   * **Consistency**: The Markdown-based skills act as "pedagogical guardrails," ensuring the AI doesn't break character or use condescending language.
+   * **Maintainability**: If you want to change how the tutor explains complex physics, you only edit `skills/domain/science/physics/SKILL.md` rather than hunting through Python code or a 5,000-word prompt file.
+
+3. **Meta-Prompts**: The project also uses specialized Meta-Prompts for background tasks (found in `skills/meta/`):
+   * **question_classification**: Decides if your question needs context resolution.
+   * **memory_extraction**: Analyzes the tutor's own answers to extract "Facts" it has taught you, which are then saved to your `LearnerState`.
 
 ---
 
@@ -113,41 +123,34 @@ L'IA peut mieux soutenir le dialogue d'apprentissage en se concentrant sur quatr
 *   **Adaptation des explications** : Par l'ajustement dynamique du niveau de langage (Fondation, Standard, Expert) en fonction de la maîtrise démontrée par l'élève.
 *   **Amélioration des interactions d'apprentissage** : En ne se contentant pas de répondre, mais en vérifiant activement la compréhension et en demandant des clarifications si nécessaire.
 
-## 3. Analyse du Dataset QReCC et Stratégies Innovantes
+## 3. Système de Prompting Basé sur les "Skills" (Compétences)
+Ce projet utilise un système de "Skill-Based Prompting" hautement structuré. C'est le cœur de l'adaptation du tuteur sans nécessiter un prompt statique massif pour chaque tour. Au lieu d'un seul long prompt, le système assemble dynamiquement un prompt système en superposant plusieurs fichiers Markdown (`SKILL.md`) en fonction du contexte actuel :
+
+1. **Architecture du Prompt** : Construit le prompt final dans `modules/adaptive_teacher.py` en utilisant des couches comme `INDEX.md` et des **Skills de Style** (Fondation/Standard/Expert).
+2. **Utilité** : Réduit la latence et les coûts, garantit la cohérence pédagogique et facilite la maintenance.
+3. **Meta-Prompts** : Utilisés pour la classification des questions et l'extraction de faits en arrière-plan.
+
+## 4. Analyse du Dataset QReCC et Stratégies Innovantes
 Le projet utilise le dataset QReCC de trois manières concrètes :
 - **Rewriting** : Les annotations humaines servent de signal pour notre moteur de clarté.
 - **Structure de Conversation** : Les échanges multi-tours informent la conception de notre mémoire de session.
 - **Évaluation** : Utilisation du jeu de tests pour calculer nos six nouvelles métriques **CLQ** (Conversational Learning Quality).
 
-Les stratégies innovantes proposées (mémoire structurée, détection de confusion à deux couches, styles pédagogiques injectés) visent à transformer une expérience de recherche d'information en une véritable expérience d'apprentissage tutoré.
-
-## 4. Limitations des Approches Existantes
+## 5. Limitations des Approches Existantes
 Le système répond aux lacunes des modèles actuels :
 - **Contexte limité à la désambiguïsation** : Nous l'utilisons pour modéliser l'apprenant.
 - **Biais vers la métrique F1** : Nous privilégions la qualité pédagogique (CLQ).
 - **Absence de détection de confusion** : Nous identifions activement les blocages de l'élève pour les résoudre avant de poursuivre.
 
-## 5. Scénarios d'Apprentissage Réels
+## 6. Scénarios d'Apprentissage Réels
 Voici comment le système réagit dans des situations concrètes :
 
 *   **Scénario A : L'élève qui approfondit**
-    *   *Comportement* : Pose une question courte comme "Et pour l'énergie ?".
-    *   *Réponse IA* : Identifie une question **résolvable**, la reformule en contexte et maintient un flux fluide sans redemander le sujet.
 *   **Scénario B : L'élève perdu**
-    *   *Comportement* : Répète sa question ou exprime son incompréhension.
-    *   *Réponse IA* : Détecte la **confusion**, bascule en style **Fondation** et utilise une analogie simplifiée au lieu d'une définition technique.
 *   **Scénario C : L'élève avancé**
-    *   *Comportement* : Démontre une compréhension rapide sur plusieurs échanges.
-    *   *Réponse IA* : Augmente l'estimation de maîtrise et passe en style **Expert**, offrant des détails plus techniques et des références scientifiques.
 
-## 6. Métriques CLQ (Qualité de l'Apprentissage)
-Six métriques originales mesurent la qualité pédagogique :
-1. **CRR** : Taux de résolution de la confusion.
-2. **ESP** : Précision du style d'explication.
-3. **CCE** : Engagement lors des vérifications de compréhension.
-4. **CUR** : Taux d'utilisation du contexte.
-5. **URR** : Taux de répétition inutile.
-6. **CP** : Précision des demandes de clarification.
+## 7. Métriques CLQ (Qualité de l'Apprentissage)
+Six métriques originales mesurent la qualité pédagogique : CRR, ESP, CCE, CUR, URR, CP.
 
 ---
 *Pour plus de détails techniques, veuillez consulter le fichier README.md à la racine du projet.*

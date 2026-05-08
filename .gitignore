@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.python-version
+.venv/
+env/
+venv/
+ENV/
+.env
+.env.local
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp
+.pnp.js
+.yarn/
+
+# Next.js
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel/
+
+# OS/IDEs
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project Specific
+dataset/
+data/
+adaptive-tutor/.next/
+adaptive-tutor/node_modules/
+adaptive-tutor/__pycache__/
+adaptive-tutor/.pytest_cache/
