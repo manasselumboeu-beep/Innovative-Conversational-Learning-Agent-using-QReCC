@@ -1,7 +1,27 @@
 # 🎓 Project Report: AdaptiveTutor - A Conversational Learning System
 
+
 ## 1. Project Overview
 **AdaptiveTutor** is an innovative conversational learning agent built on the QReCC dataset. It is designed to detect student confusion, adapt explanation styles in real-time, and improve dialogue quality beyond simple answer correctness. Unlike standard QA systems, AdaptiveTutor behaves like a proactive teacher, not just a search engine.
+
+this project uses a highly structured "Skill-Based Prompting" system. It is the core of how the tutor adapts its behavior without requiring a massive, static prompt for every turn.
+
+  Instead of one long prompt, the system dynamically assembles a system prompt by layering several Markdown files (SKILL.md) based on the current context:
+
+  1. The Prompt Architecture
+  The system builds the final prompt in modules/adaptive_teacher.py using these layers:
+   * INDEX.md (Global): Defines the identity of "AdaptiveTutor" and general pedagogical principles (e.g., "One concept at a time," "Never say 'simply'").
+   * Style Skills: Depending on your calculated proficiency, it loads either explanation/foundation/SKILL.md, standard/SKILL.md, or expert/SKILL.md. These control technical depth and sentence length.
+  2. Why is it needed?
+  This system is critical for several reasons:
+   * Latency & Cost: By only loading the "skills" needed for the current turn, the prompt stays lean, saving tokens and speeding up response times.
+   * Consistency: The Markdown-based skills act as "pedagogical guardrails," ensuring the AI doesn't break character or use condescending language.
+   * Maintainability: If you want to change how the tutor explains complex physics, you only edit skills/domain/science/physics/SKILL.md rather than hunting through Python code or a 5,000-word prompt file.
+
+  3. Meta-Prompts
+  The project also uses specialized Meta-Prompts for background tasks (found in skills/meta/):
+   * question_classification: Decides if your question needs context resolution.
+   * memory_extraction: Analyzes the tutor's own answers to extract "Facts" it has taught you, which are then saved to your LearnerState.
 
 ---
 
