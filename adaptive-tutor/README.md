@@ -1,10 +1,10 @@
-# 🎓 AdaptiveTutor: Conversational Learning System
+# AdaptiveTutor: Conversational Learning System
 
 AdaptiveTutor is a modern, pedagogically-intelligent AI assistant designed to adapt its teaching style in real-time based on student proficiency and confusion detection. It provides a high-fidelity chat experience optimized for deep learning and conceptual clarity.
 
-## 🚀 Key Features
+## Key Features
 
-### 🧠 Pedagogical Intelligence
+### Pedagogical Intelligence
 - **Skill-Based Prompting**: The core of how the tutor adapts its behavior without requiring a massive, static prompt for every turn. Instead of one long prompt, the system dynamically assembles a system prompt by layering several Markdown files (`SKILL.md`) based on the current context:
   - **Prompt Architecture**: Builds the final prompt in `modules/adaptive_teacher.py` using layers like `INDEX.md` (Global Principles) and **Style Skills** (Foundation/Standard/Expert).
   - **Efficiency & Consistency**: Only loads necessary skills to minimize latency while acting as "pedagogical guardrails" to ensure consistent, non-condescending language.
@@ -13,17 +13,17 @@ AdaptiveTutor is a modern, pedagogically-intelligent AI assistant designed to ad
 - **Confusion Detection**: Actively monitors student responses for signs of confusion and provides targeted clarification requests.
 - **Session Memory**: Tracks known facts and learning progress across the entire conversation.
 
-### 🎨 Modern AI Interface
+### Modern AI Interface
 - **ChatGPT-Style Layout**: A clean, centered conversation view with professional avatars and smooth animations.
 - **Pure White Theme**: A premium, focused design featuring an elevated "floating" prompt box and subtle off-white backgrounds.
 - **Rich Text Support**: Full Markdown integration (bolding, lists, tables) and code syntax highlighting using `react-markdown` and `remark-gfm`.
 - **Intelligent Prompt Box**: Auto-resizing textarea with intuitive action buttons and polished interactive feedback.
 
-### 📊 Real-time Learning Insights
+### Real-time Learning Insights
 - **Insights Sidebar**: Dedicated panels for monitoring Teaching Style, Session Statistics (Turns, Proficiency), and a live-updated list of Known Facts.
 - **Subtle Metadata**: Pedagogical tags (Style used, Question type, Confusion level) appear elegantly in message headers on hover.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) with `@tailwindcss/typography`
@@ -32,7 +32,7 @@ AdaptiveTutor is a modern, pedagogically-intelligent AI assistant designed to ad
 - **Content**: [React Markdown](https://github.com/remarkjs/react-markdown) & [Remark GFM](https://github.com/remarkjs/remark-gfm)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 
-## 🏁 Getting Started
+## Getting Started
 
 Follow these steps to clone and run AdaptiveTutor on your local machine.
 
@@ -96,7 +96,7 @@ npm run dev
 - **Frontend**: [http://localhost:3000](http://localhost:3000)
 - **API Health**: [http://localhost:8001/api/health](http://localhost:8001/api/health)
 
-## 🏗️ Project Structure
+## Project Structure
 
 - `/src/app`: Main page logic and layout.
 - `/src/components`: Reusable UI elements and pedagogical panels.
